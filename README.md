@@ -78,11 +78,9 @@ To set up Wysper locally:
 # Clone the repository
 git clone https://github.com/unshakled/wysper.git
 cd wysper
-
-# Use your web server of choice
 ```
 
-Then visit `http://localhost:8000` in your browser.
+Then use the web server of your choice & visit in your browser.
 
 ## 📋 Security Considerations
 

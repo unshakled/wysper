@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Wysper.link - Secure Ephemeral Messaging</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net;">
+    <meta name="referrer" content="no-referrer">
+    <meta name="description" content="Wysper.link: A privacy-first tool for secure, ephemeral messaging with 100% client-side encryption. No server logging, open-source.">
+    <meta name="keywords" content="privacy, secure messaging, encryption, ephemeral, open-source, client-side, wysper">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="theme-color" content="#1e1e2e">
+    <meta name="msapplication-TileColor" content="#1e1e2e">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Wysper.link - Secure, Private Messaging">
+    <meta property="og:description" content="Send secure, ephemeral messages with Wysper.link using client-side encryption. No logging, open-source, privacy-first.">
+    <meta property="og:url" content="https://wysper.link/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Wysper.link">
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Wysper.link - Secure, Private Messaging">
+    <meta name="twitter:description" content="Send secure, ephemeral messages with Wysper.link using client-side encryption. No logging, open-source, privacy-first.">
+    
+    <link rel="canonical" href="https://wysper.link/">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body data-theme="dark">
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo" onclick="goHome(event)">
+                    <i class="ri-lock-password-line"></i>
+                    <span>Wysper.link</span>
+                </a>
+                <div class="nav-links">
+                    <a href="/" class="nav-link" onclick="goHome(event)">Home</a>
+                    <a href="#how-to-use" class="nav-link">How to Use</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <button id="toggleDark" class="theme-toggle" aria-label="Toggle dark mode">
+                        <i class="ri-moon-line"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="hero">
+                <h1 class="hero-title">End-to-End Encrypted Messages</h1>
+                <p class="hero-subtitle">Create secure, ephemeral messages with 100% client-side encryption. No data is stored on our servers, ensuring complete privacy.</p>
+            </div>
+
+            <div id="create" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="ri-lock-password-line"></i>
+                        Create a Wysper
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="message" class="form-label">Your Secret Wysper</label>
+                        <textarea id="message" class="form-control" rows="4" placeholder="Enter your message here" maxlength="1500"></textarea>
+                        <div id="charCounter" class="form-text text-right">Characters remaining: 1500</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passphrase" class="form-label">Random 7+ Word Passphrase</label>
+                        <div class="input-group">
+                            <input type="text" id="passphrase" class="form-control" placeholder="e.g., velvet dragon misty nebula onion timber galaxy">
+                            <i class="ri-clipboard-line input-icon" onclick="copyPassphrase()" title="Copy to clipboard"></i>
+                        </div>
+                        <div class="entropy-meter">
+                            <div id="entropyBar" class="entropy-bar"></div>
+                        </div>
+                        <div id="entropyMeter" class="form-text"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <button onclick="generatePassphrase()" class="btn btn-outline">Generate Random Passphrase</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="selfDestruct" class="form-label">Wysper Self-Destruct Timer</label>
+                        <select id="selfDestruct" class="form-control">
+                            <option value="0">No Self-Destruct</option>
+                            <option value="10">10 Seconds</option>
+                            <option value="30">30 Seconds</option>
+                            <option value="60" selected>1 Minute</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button onclick="encryptMessage()" class="btn btn-primary">
+                            <i class="ri-link-m"></i> Generate Secure Link
+                        </button>
+                    </div>
+
+                    <div id="link" class="result-container" style="display: none;">
+                        <button class="copy-btn" onclick="copyLink()" title="Copy to clipboard">
+                            <i class="ri-clipboard-line"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="decrypt" class="card" style="display: none;">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="ri-lock-unlock-line"></i>
+                        Decrypt a Wysper
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="decryptPassphrase" class="form-label">Enter the Passphrase</label>
+                        <input type="text" id="decryptPassphrase" class="form-control" placeholder="Enter the 7-word passphrase">
+                    </div>
+
+                    <div class="form-group">
+                        <button onclick="decryptMessage()" class="btn btn-primary">
+                            <i class="ri-lock-unlock-line"></i> Decrypt
+                        </button>
+                    </div>
+
+                    <div id="output" class="result-container" style="display: none;"></div>
+                    <div id="selfDestructTimer" class="self-destruct-timer" style="display: none;">
+                        Self-destruct in: <span id="timerSeconds"></span> seconds
+                    </div>
+                </div>
+            </div>
+
+            <div id="how-to-use" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="ri-question-line"></i>
+                        How to Use Wysper.link
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <ol class="step-list">
+                        <li class="step-item">
+                            <div class="step-item-title">Create a Wysper</div>
+                            <div class="step-item-desc">Enter your secret message in the textarea and generate a 7-word passphrase using the "Generate Random Passphrase" button.</div>
+                        </li>
+                        <li class="step-item">
+                            <div class="step-item-title">Set Self-Destruct (Optional)</div>
+                            <div class="step-item-desc">Choose a self-destruct timer (0, 10, 30, or 60 seconds) to make the message ephemeral after it's viewed.</div>
+                        </li>
+                        <li class="step-item">
+                            <div class="step-item-title">Generate Link</div>
+                            <div class="step-item-desc">Click "Generate Secure Link" to create a unique URL containing your encrypted message.</div>
+                        </li>
+                        <li class="step-item">
+                            <div class="step-item-title">Share Securely</div>
+                            <div class="step-item-desc">Copy the link and share it separately from the passphrase via a secure channel (e.g., Signal, Simplex, or in-person on a trusted device).</div>
+                        </li>
+                        <li class="step-item">
+                            <div class="step-item-title">Decrypt</div>
+                            <div class="step-item-desc">Recipient opens the link and enters the passphrase to decrypt and view the message.</div>
+                        </li>
+                    </ol>
+                    <div style="padding: 1rem; background-color: rgba(239, 68, 68, 0.1); border-radius: 0.5rem; margin-top: 1rem;">
+                        <strong>Important:</strong> Never send the passphrase with the message link to maintain security.
+                    </div>
+                </div>
+            </div>
+
+            <div id="about" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="ri-information-line"></i>
+                        About Wysper.link
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="section-title">What Wysper.link Can Do:</div>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <strong>Secure Messaging:</strong> Encrypts messages using 100% client-side AES-GCM and PBKDF2, ensuring data remains private and inaccessible to servers.
+                        </li>
+                        <li class="feature-item">
+                            <strong>No Server Storage:</strong> Does not store messages, passphrases, or metadata on our servers—everything is processed in your browser.
+                        </li>
+                        <li class="feature-item">
+                            <strong>Ephemeral Messages:</strong> Supports self-destruct timers to automatically delete messages after viewing.
+                        </li>
+                        <li class="feature-item">
+                            <strong>Open-Source Transparency:</strong> Fully open-source, community-driven by Unshakled Inc., allowing anyone to verify the code.
+                        </li>
+                    </ul>
+
+                    <div class="section-title">What Wysper.link Cannot Do:</div>
+                    <ul class="limitation-list">
+                        <li class="limitation-item">
+                            <strong>Protect Against Malware:</strong> Cannot prevent malware on your device from capturing your screen, keyboard input, or clipboard data.
+                        </li>
+                        <li class="limitation-item">
+                            <strong>Guard Against Social Engineering:</strong> Cannot stop you from being tricked into sharing your passphrase or link with an attacker.
+                        </li>
+                        <li class="limitation-item">
+                            <strong>Prevent Key Compromise:</strong> Cannot secure your passphrase if you send it with the URL or store it insecurely.
+                        </li>
+                        <li class="limitation-item">
+                            <strong>Recover Lost Passphrases:</strong> Cannot retrieve a forgotten passphrase—there's no backdoor or recovery mechanism.
+                        </li>
+                        <li class="limitation-item">
+                            <strong>Ensure Recipient Security:</strong> Cannot control the recipient's device security or prevent them from sharing the decrypted message.
+                        </li>
+                    </ul>
+
+                    <div class="section-title">In Simple Terms:</div>
+                    <p class="mb-4">Wysper.link works like a digital envelope with a special lock. You put your message inside, and only someone with the right 7-word key can open it. The message isn't stored anywhere except in the link itself.</p>
+                    
+                    <p class="mb-4">When you use Wysper.link, your message is scrambled (encrypted) right in your browser with bank-level security. We never see your message or store it on any server. When the recipient opens the link and enters the right passphrase, the message is unscrambled in their browser.</p>
+                    
+                    <p>For maximum security, always share the link and passphrase through different channels. For example, send the link through email and the passphrase through a text message.</p>
+
+                    <div class="section-title">Security Best Practices:</div>
+                    <p>Always share the passphrase separately via trusted channels (e.g., Signal, Simplex, or in-person). Never include it with the message link. Use a unique passphrase for each wysper and avoid reusing it.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p class="footer-text">© 2025 Wysper.link - Developed by Unshakled Inc.</p>
+        </div>
+    </footer>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <p id="modal-message"></p>
+        </div>
+    </div>
+
+    <script src="/eff_wordlist.js"></script>
+    <script src="/script.js"></script>
+</body>
+</html>

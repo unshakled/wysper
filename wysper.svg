@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <!-- Speech bubble outline -->
+  <path d="M400,80 C433.137,80 460,106.863 460,140 L460,300 C460,333.137 433.137,360 400,360 L250,360 L170,440 L170,360 L100,360 C66.863,360 40,333.137 40,300 L40,140 C40,106.863 66.863,80 100,80 L400,80 Z" 
+        fill="none" 
+        stroke="black" 
+        stroke-width="25" 
+        stroke-linejoin="round"/>
+  
+  <!-- Lock body -->
+  <rect x="170" y="190" width="160" height="120" rx="15" ry="15" fill="black"/>
+  
+  <!-- Lock shackle -->
+  <path d="M200,190 L200,150 C200,130 225,115 250,115 C275,115 300,130 300,150 L300,190" 
+        fill="none" 
+        stroke="black" 
+        stroke-width="25" 
+        stroke-linecap="round"/>
+  
+  <!-- Keyhole -->
+  <circle cx="250" cy="230" r="15" fill="white"/>
+  <path d="M250,245 L250,270" stroke="white" stroke-width="12" stroke-linecap="round"/>
+</svg>

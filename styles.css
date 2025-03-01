@@ -485,6 +485,25 @@ footer {
     font-size: 0.875rem;
 }
 
+/* Footer link styles */
+.footer-text a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-weight: 500;
+}
+
+.footer-text a:hover {
+    color: var(--primary-light);
+}
+
+/* Add a little spacing between footer elements */
+.footer-text a i {
+    font-size: 1.1rem;
+    vertical-align: middle;
+    margin-right: 0.25rem;
+}
+
 /* Modal */
 .modal {
     display: none;

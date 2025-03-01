@@ -488,7 +488,7 @@ footer {
 /* Footer link styles */
 .footer-text a {
     color: var(--primary);
-    text-decoration: none;
+    text-decoration: none !important;
     transition: color 0.2s ease;
     font-weight: 500;
 }
